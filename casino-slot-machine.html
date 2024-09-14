@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Casino Slot Machine Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .number {
+            font-size: 2em;
+            margin: 10px;
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            border: 2px solid #333;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        button {
+            padding: 10px 20px;
+            margin-top: 20px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 1.5em;
+            color: #333;
+        }
+        #winScreen, #loseScreen {
+            display: none;
+            font-size: 2em;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Casino Slot Machine Game</h1>
+
+    <!-- Display target 4-digit number -->
+    <h2>Target Number</h2>
+    <div id="targetNumber" class="number-container">
+        <!-- Target number will appear here -->
+    </div>
+    <br>
+    <button onclick="generateTargetNumber()">Generate Target Number</button>
+
+    <!-- Display generated numbers one by one -->
+    <h2>Your Numbers</h2>
+    <div id="generatedNumbers" class="number-container">
+        <!-- Generated numbers will appear here one by one -->
+    </div>
+    <br>
+    <button onclick="playGame()">Play</button>
+
+    <!-- Win or Lose Result -->
+    <div id="winScreen">🎉 Congratulations, You Win! 🎉</div>
+    <div id="loseScreen">😢 Sorry, You Lose. 😢</div>
+
+    <script>
+        let targetNumber = '';  // Stores the 4-digit target number
+
+        // Function to generate a random 4-digit number and display it
+        function generateTargetNumber() {
+            targetNumber = '';
+            const targetContainer = document.getElementById('targetNumber');
+            targetContainer.innerHTML = '';  // Clear previous target number
+
+            // Generate 4 random digits and form the target number
+            for (let i = 0; i < 4; i++) {
+                const randomDigit = Math.floor(Math.random() * 10);  // Random digit between 0-9
+                targetNumber += randomDigit;
+                
+                // Display each digit of the target number
+                const digitElement = document.createElement('span');
+                digitElement.className = 'number';
+                digitElement.textContent = randomDigit;
+                targetContainer.appendChild(digitElement);
+            }
+
+            // Clear previous result screen
+            document.getElementById('winScreen').style.display = 'none';
+            document.getElementById('loseScreen').style.display = 'none';
+        }
+
+        // Function to simulate the "Play" button press
+        function playGame() {
+            if (!targetNumber) {
+                alert("Please generate the target number first!");
+                return;
+            }
+
+            const generatedContainer = document.getElementById('generatedNumbers');
+            generatedContainer.innerHTML = '';  // Clear previous numbers
+
+            let generatedNumber = '';  // Stores the generated 4-digit number
+
+            // Function to generate and display a digit with a delay
+            function generateDigit(index) {
+                setTimeout(() => {
+                    const randomDigit = Math.floor(Math.random() * 10);  // Random digit between 0-9
+                    generatedNumber += randomDigit;
+
+                    // Display the generated digit
+                    const digitElement = document.createElement('span');
+                    digitElement.className = 'number';
+                    digitElement.textContent = randomDigit;
+                    generatedContainer.appendChild(digitElement);
+
+                    // After the 4th digit is generated, check for a win or lose
+                    if (index === 3) {
+                        checkResult(generatedNumber);
+                    }
+                }, index * 1000);  // Delay each digit by 1 second
+            }
+
+            // Generate and display four digits with a delay
+            for (let i = 0; i < 4; i++) {
+                generateDigit(i);
+            }
+        }
+
+        // Function to check if the generated number matches the target number
+        function checkResult(generatedNumber) {
+            if (generatedNumber === targetNumber) {
+                document.getElementById('winScreen').style.display = 'block';
+            } else {
+                document.getElementById('loseScreen').style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html>
